@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UIRUSUNUKI - SYSTEM PROFILE</title>
+    <title>uirusunuki - デジタルアーキテクト</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
         
         * {
             margin: 0;
@@ -13,519 +13,538 @@
             box-sizing: border-box;
         }
         
-        body {
-            font-family: 'Orbitron', monospace;
-            background: #000;
-            color: #00ff88;
-            overflow-x: hidden;
-            min-height: 100vh;
-            position: relative;
+        :root {
+            --primary: #00d9ff;
+            --secondary: #7c3aed;
+            --accent: #10b981;
+            --dark: #0f0f23;
+            --darker: #050505;
+            --light: #ffffff;
+            --gray: #8b8b8b;
+            --surface: rgba(255, 255, 255, 0.05);
         }
         
-        /* Matrix rain background */
-        .matrix-bg {
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        /* Floating particles background */
+        .particles {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: -1;
-            opacity: 0.1;
+            overflow: hidden;
         }
         
-        .matrix-bg canvas {
-            display: block;
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 6s infinite ease-in-out;
         }
         
-        /* Scanlines overlay */
-        .scanlines {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 2px,
-                rgba(0, 255, 136, 0.03) 2px,
-                rgba(0, 255, 136, 0.03) 4px
-            );
-            pointer-events: none;
-            z-index: 1;
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.6; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
-            position: relative;
-            z-index: 2;
+            padding: 2rem;
         }
         
+        /* Header */
         .header {
             text-align: center;
-            margin-bottom: 60px;
-            padding: 40px 0;
-            border-bottom: 2px solid #00ff88;
-            box-shadow: 0 2px 20px rgba(0, 255, 136, 0.3);
+            margin-bottom: 4rem;
+            padding: 3rem 0;
         }
         
-        .title {
-            font-size: 4rem;
-            font-weight: 900;
-            letter-spacing: 0.2em;
-            text-shadow: 0 0 20px #00ff88, 0 0 40px #00ff88;
-            margin-bottom: 20px;
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-        
-        .subtitle {
-            font-size: 1.2rem;
-            color: #00ccff;
-            letter-spacing: 0.1em;
-            opacity: 0.8;
-        }
-        
-        @keyframes glow {
-            from { text-shadow: 0 0 20px #00ff88, 0 0 40px #00ff88; }
-            to { text-shadow: 0 0 30px #00ff88, 0 0 60px #00ff88, 0 0 80px #00ff88; }
-        }
-        
-        .profile-grid {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 40px;
-            margin-bottom: 60px;
-        }
-        
-        .profile-image {
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 4px;
             position: relative;
-            aspect-ratio: 1;
-            background: linear-gradient(45deg, #001122, #003344);
-            border: 3px solid #00ff88;
-            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
         }
         
-        .profile-image img {
+        .avatar img {
             width: 100%;
             height: 100%;
+            border-radius: 50%;
             object-fit: cover;
-            border-radius: 17px;
-            filter: drop-shadow(0 0 20px rgba(0, 255, 136, 0.6));
-            transition: all 0.3s ease;
         }
         
-        .profile-image:hover img {
-            filter: drop-shadow(0 0 30px rgba(0, 255, 136, 0.8)) brightness(1.1);
-            transform: scale(1.02);
-        }
-        
-        .profile-image::before {
+        .avatar::before {
             content: '';
             position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, #00ff88, #00ccff, #00ff88);
-            border-radius: 22px;
+            inset: -2px;
+            background: conic-gradient(from 0deg, var(--primary), var(--secondary), var(--accent), var(--primary));
+            border-radius: 50%;
             z-index: -1;
-            animation: pulse 2s infinite;
+            animation: spin 3s linear infinite;
         }
         
-        @keyframes pulse {
-            0%, 100% { opacity: 0.8; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.01); }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
         
-        .profile-info {
+        .name {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            color: var(--gray);
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Main content grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+        
+        /* Info cards */
+        .info-section {
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            gap: 1.5rem;
         }
         
-        .info-block {
-            background: rgba(0, 255, 136, 0.05);
-            border: 1px solid #00ff88;
-            border-radius: 10px;
-            padding: 30px;
-            margin-bottom: 20px;
+        .info-card {
+            background: var(--surface);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            transition: all 0.3s ease;
         }
         
-        .info-block:hover {
-            background: rgba(0, 255, 136, 0.1);
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
-            transform: translateY(-5px);
+        .info-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 217, 255, 0.1);
+            border-color: rgba(0, 217, 255, 0.3);
         }
         
-        .info-block::before {
+        .info-card::before {
             content: '';
             position: absolute;
             top: 0;
-            left: -100%;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #00ff88, transparent);
-            animation: scan 3s infinite;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
         
-        @keyframes scan {
-            0% { left: -100%; }
-            100% { left: 100%; }
+        .info-card:hover::before {
+            opacity: 1;
         }
         
         .info-label {
-            font-size: 0.9rem;
-            color: #00ccff;
-            margin-bottom: 10px;
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: 1px;
+            font-weight: 500;
         }
         
         .info-value {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #ffffff;
+            font-size: 1.1rem;
+            color: var(--light);
+            font-weight: 500;
         }
         
-        .skills-section {
-            margin-bottom: 60px;
+        /* About section */
+        .about-section {
+            background: var(--surface);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
         }
         
         .section-title {
-            font-size: 2rem;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 40px;
-            color: #00ccff;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .about-text {
+            color: var(--gray);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+        
+        /* Code block */
+        .code-block {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            margin: 1.5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .code-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+        }
+        
+        .code-line {
+            display: block;
+            color: var(--gray);
+            margin-bottom: 0.3rem;
+        }
+        
+        .code-comment { color: #6a9955; }
+        .code-keyword { color: #569cd6; }
+        .code-string { color: #ce9178; }
+        .code-function { color: #dcdcaa; }
+        
+        /* Skills grid */
+        .skills-section {
+            margin-bottom: 4rem;
         }
         
         .skills-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
         }
         
-        .skill-card {
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 204, 255, 0.1));
-            border: 1px solid #00ff88;
-            border-radius: 15px;
-            padding: 25px;
+        .skill-item {
+            background: var(--surface);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
             text-align: center;
-            position: relative;
-            overflow: hidden;
             transition: all 0.3s ease;
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
         
-        .skill-card:hover {
+        .skill-item:hover {
             transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(0, 217, 255, 0.2);
         }
         
-        .skill-card::before {
+        .skill-item::after {
             content: '';
             position: absolute;
             top: -50%;
             left: -50%;
             width: 200%;
             height: 200%;
-            background: conic-gradient(from 0deg, transparent, rgba(0, 255, 136, 0.1), transparent);
+            background: conic-gradient(from 0deg, transparent, rgba(0, 217, 255, 0.1), transparent);
             animation: rotate 4s linear infinite;
             opacity: 0;
             transition: opacity 0.3s ease;
         }
         
-        .skill-card:hover::before {
+        .skill-item:hover::after {
             opacity: 1;
         }
         
         @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            to { transform: rotate(360deg); }
         }
         
         .skill-name {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 10px;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
             position: relative;
             z-index: 1;
         }
         
         .skill-level {
-            font-size: 0.9rem;
-            color: #00ccff;
+            font-size: 0.85rem;
+            color: var(--gray);
             position: relative;
             z-index: 1;
         }
         
+        /* Contact section */
         .contact-section {
-            text-align: center;
-            padding: 40px;
-            background: rgba(0, 255, 136, 0.05);
-            border: 2px solid #00ff88;
+            background: var(--surface);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
-            position: relative;
+            padding: 2rem;
+            text-align: center;
         }
         
-        .contact-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 30px;
-            color: #00ccff;
-        }
-        
-        .contact-info {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            flex-wrap: wrap;
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
         }
         
         .contact-item {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 1.1rem;
+            justify-content: center;
+            gap: 0.8rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
             transition: all 0.3s ease;
             text-decoration: none;
-            color: #00ff88;
-            cursor: pointer;
+            color: var(--light);
         }
         
         .contact-item:hover {
-            color: #ffffff;
-            text-shadow: 0 0 10px #00ff88;
+            background: rgba(0, 217, 255, 0.1);
             transform: translateY(-2px);
         }
         
-        .contact-item:active {
-            transform: translateY(0px);
-        }
-        
-        /* Terminal effect */
-        .terminal {
-            background: #000;
-            border: 2px solid #00ff88;
-            border-radius: 10px;
-            padding: 20px;
-            font-family: 'Courier New', monospace;
-            margin: 40px 0;
-            position: relative;
-        }
-        
-        .terminal::before {
-            content: '> SYSTEM_STATUS: ONLINE';
-            display: block;
-            color: #00ff88;
-            margin-bottom: 10px;
-            animation: typewriter 2s steps(20, end);
-        }
-        
-        @keyframes typewriter {
-            from { width: 0; }
-            to { width: 100%; }
-        }
-        
-        .terminal-content {
-            color: #ffffff;
-            line-height: 1.6;
+        .contact-icon {
+            font-size: 1.2rem;
         }
         
         /* Responsive design */
         @media (max-width: 768px) {
-            .title {
-                font-size: 2.5rem;
-            }
-            
-            .profile-grid {
+            .content-grid {
                 grid-template-columns: 1fr;
-                gap: 30px;
+                gap: 2rem;
             }
             
             .skills-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+            
+            .contact-grid {
                 grid-template-columns: 1fr;
             }
             
-            .contact-info {
-                flex-direction: column;
-                gap: 20px;
+            .container {
+                padding: 1rem;
             }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--dark);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00b4d4;
         }
     </style>
 </head>
 <body>
-    <div class="matrix-bg">
-        <canvas id="matrix"></canvas>
-    </div>
-    <div class="scanlines"></div>
+    <div class="particles" id="particles"></div>
     
     <div class="container">
         <header class="header">
-            <h1 class="title">UIRUSUNUKI</h1>
-            <p class="subtitle">DIGITAL ENTITY • SYSTEM ARCHITECT • CODE NAVIGATOR</p>
+            <div class="avatar">
+                <img src="./ico.png" alt="uirusunuki" />
+            </div>
+            <h1 class="name">uirusunuki</h1>
+            <p class="tagline">デジタルアーキテクト / システムデザイナー</p>
         </header>
         
-        <div class="profile-grid">
-            <div class="profile-image">
-                <img src="ico.png" alt="UIRUSUNUKI Profile" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
-                <div style="display: none; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 900; color: #00ff88;">UI</div>
-            </div>
-            <div class="profile-info">
-                <div class="info-block">
-                    <div class="info-label">System ID</div>
-                    <div class="info-value">UIRUSUNUKI.EXE</div>
+        <div class="content-grid">
+            <div class="info-section">
+                <div class="info-card">
+                    <div class="info-label">role</div>
+                    <div class="info-value">full-stack developer</div>
                 </div>
-                <div class="info-block">
-                    <div class="info-label">Access Level</div>
-                    <div class="info-value">ADMINISTRATOR</div>
+                <div class="info-card">
+                    <div class="info-label">status</div>
+                    <div class="info-value">available for projects</div>
                 </div>
-                <div class="info-block">
-                    <div class="info-label">Status</div>
-                    <div class="info-value">FULLY OPERATIONAL</div>
+                <div class="info-card">
+                    <div class="info-label">location</div>
+                    <div class="info-value">digital space</div>
                 </div>
-                <div class="info-block">
-                    <div class="info-label">Primary Function</div>
-                    <div class="info-value">DIGITAL INNOVATION</div>
+                <div class="info-card">
+                    <div class="info-label">focus</div>
+                    <div class="info-value">ui/ux innovation</div>
                 </div>
             </div>
-        </div>
-        
-        <div class="terminal">
-            <div class="terminal-content">
-                <div>INITIALIZING PROFILE DATA...</div>
-                <div>SCANNING NEURAL NETWORKS...</div>
-                <div>QUANTUM PROCESSING ACTIVE</div>
-                <div>READY FOR CONNECTION</div>
+            
+            <div class="about-section">
+                <h2 class="section-title">about</h2>
+                <div class="about-text">
+                    デジタル空間でユーザー体験を追求するデベロッパー。モダンなWebテクノロジーと直感的なデザインを組み合わせて、印象的なインターフェースを創り出しています。
+                </div>
+                
+                <div class="code-block">
+                    <span class="code-line"><span class="code-comment">// 日々のワークフロー</span></span>
+                    <span class="code-line"><span class="code-keyword">const</span> <span class="code-function">dailyRoutine</span> = () => {</span>
+                    <span class="code-line">  <span class="code-function">design</span>(<span class="code-string">'innovative interfaces'</span>);</span>
+                    <span class="code-line">  <span class="code-function">code</span>(<span class="code-string">'clean solutions'</span>);</span>
+                    <span class="code-line">  <span class="code-function">iterate</span>(<span class="code-string">'until perfect'</span>);</span>
+                    <span class="code-line">};</span>
+                </div>
             </div>
         </div>
         
         <section class="skills-section">
-            <h2 class="section-title">SYSTEM CAPABILITIES</h2>
+            <h2 class="section-title">skills & expertise</h2>
             <div class="skills-grid">
-                <div class="skill-card">
-                    <div class="skill-name">NEURAL NETWORKS</div>
-                    <div class="skill-level">LEVEL: EXPERT</div>
+                <div class="skill-item">
+                    <div class="skill-name">React / Next.js</div>
+                    <div class="skill-level">advanced</div>
                 </div>
-                <div class="skill-card">
-                    <div class="skill-name">QUANTUM COMPUTING</div>
-                    <div class="skill-level">LEVEL: ADVANCED</div>
+                <div class="skill-item">
+                    <div class="skill-name">TypeScript</div>
+                    <div class="skill-level">proficient</div>
                 </div>
-                <div class="skill-card">
-                    <div class="skill-name">HOLOGRAPHIC UI</div>
-                    <div class="skill-level">LEVEL: MASTER</div>
+                <div class="skill-item">
+                    <div class="skill-name">UI/UX Design</div>
+                    <div class="skill-level">expert</div>
                 </div>
-                <div class="skill-card">
-                    <div class="skill-name">DATA SYNTHESIS</div>
-                    <div class="skill-level">LEVEL: EXPERT</div>
+                <div class="skill-item">
+                    <div class="skill-name">Three.js</div>
+                    <div class="skill-level">intermediate</div>
                 </div>
-                <div class="skill-card">
-                    <div class="skill-name">CYBERSECURITY</div>
-                    <div class="skill-level">LEVEL: ADVANCED</div>
+                <div class="skill-item">
+                    <div class="skill-name">Node.js</div>
+                    <div class="skill-level">advanced</div>
                 </div>
-                <div class="skill-card">
-                    <div class="skill-name">AI INTEGRATION</div>
-                    <div class="skill-level">LEVEL: MASTER</div>
+                <div class="skill-item">
+                    <div class="skill-name">GraphQL</div>
+                    <div class="skill-level">proficient</div>
                 </div>
             </div>
         </section>
         
         <section class="contact-section">
-            <h2 class="contact-title">ESTABLISH CONNECTION</h2>
-            <div class="contact-info">
-                <a href="https://scratch.mit.edu/users/googledaisuki/" class="contact-item">
-                    <span>Scratch</span>
-                    <span>my Scratch follow now</span>
+            <h2 class="section-title">get in touch</h2>
+            <div class="contact-grid">
+                <a href="mailto:hello@uirusunuki.dev" class="contact-item">
+                    <span class="contact-icon">discord</span>
+                    <span>https://discord.gg/mSySTg52wv</span>
                 </a>
-                <a href="https://discord.gg/mSySTg52wv" class="contact-item" target="_blank" rel="noopener noreferrer">
-                    <span>Discord</span>
-                    <span>Discord Server Join Now</span>
+                <a href="#" class="contact-item">
+                    <span class="contact-icon">Scratch</span>
+                    <span>https://scratch.mit.edu/users/googledaisuki/</span>
                 </a>
-                <a href="https://x.com/windowsdaisuki" class="contact-item" target="_blank" rel="noopener noreferrer">
-                    <span>X</span>
-                    <span>My SNS Follow Now</span>
+                <a href="#" class="contact-item">
+                    <span class="contact-icon">X</span>
+                    <span>https://x.com/windowsdaisuki</span>
                 </a>
             </div>
         </section>
     </div>
     
     <script>
-        // Matrix rain effect
-        const canvas = document.getElementById('matrix');
-        const ctx = canvas.getContext('2d');
+        // Floating particles
+        const particlesContainer = document.getElementById('particles');
+        const particleCount = 50;
         
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        
-        const katakana = 'アィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモヤユヨラリルレロワヲン';
-        const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        const nums = '0123456789';
-        const alphabet = katakana + latin + nums;
-        
-        const fontSize = 16;
-        const columns = canvas.width / fontSize;
-        
-        const rainDrops = [];
-        
-        for (let x = 0; x < columns; x++) {
-            rainDrops[x] = 1;
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 6 + 's';
+            particle.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            particlesContainer.appendChild(particle);
         }
         
-        const draw = () => {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            ctx.fillStyle = '#00ff88';
-            ctx.font = fontSize + 'px monospace';
-            
-            for (let i = 0; i < rainDrops.length; i++) {
-                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
-                
-                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    rainDrops[i] = 0;
-                }
-                rainDrops[i]++;
-            }
+        // Smooth reveal animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
         };
         
-        setInterval(draw, 30);
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
         
-        // Resize canvas on window resize
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+        // Observe all animated elements
+        document.querySelectorAll('.info-card, .skill-item, .about-section, .contact-section').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
         });
         
-        // Add interactive effects
-        document.querySelectorAll('.skill-card').forEach(card => {
-            card.addEventListener('click', () => {
-                card.style.animation = 'none';
+        // Skill card click effects
+        document.querySelectorAll('.skill-item').forEach(skill => {
+            skill.addEventListener('click', () => {
+                skill.style.transform = 'scale(0.95)';
                 setTimeout(() => {
-                    card.style.animation = '';
-                }, 100);
+                    skill.style.transform = '';
+                }, 150);
             });
         });
         
-        // Terminal typing effect
-        const terminalContent = document.querySelector('.terminal-content');
-        const lines = terminalContent.children;
-        
-        Array.from(lines).forEach((line, index) => {
-            line.style.opacity = '0';
-            setTimeout(() => {
-                line.style.opacity = '1';
-                line.style.animation = 'typewriter 1s steps(20, end)';
-            }, index * 500);
+        // Parallax effect for particles
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const particles = document.querySelectorAll('.particle');
+            
+            particles.forEach((particle, index) => {
+                const speed = (index % 3 + 1) * 0.5;
+                particle.style.transform = `translateY(${scrolled * speed}px)`;
+            });
         });
     </script>
 </body>
