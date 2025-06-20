@@ -297,11 +297,19 @@
             gap: 10px;
             font-size: 1.1rem;
             transition: all 0.3s ease;
+            text-decoration: none;
+            color: #00ff88;
+            cursor: pointer;
         }
         
         .contact-item:hover {
             color: #ffffff;
             text-shadow: 0 0 10px #00ff88;
+            transform: translateY(-2px);
+        }
+        
+        .contact-item:active {
+            transform: translateY(0px);
         }
         
         /* Terminal effect */
@@ -369,7 +377,8 @@
         
         <div class="profile-grid">
             <div class="profile-image">
-                <img src="./ico.png" alt="UIRUSUNUKI Profile" />
+                <img src="ico.png" alt="UIRUSUNUKI Profile" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+                <div style="display: none; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 900; color: #00ff88;">UI</div>
             </div>
             <div class="profile-info">
                 <div class="info-block">
@@ -433,18 +442,18 @@
         <section class="contact-section">
             <h2 class="contact-title">ESTABLISH CONNECTION</h2>
             <div class="contact-info">
-                <div class="contact-item">
-                    <span>X.com</span>
-                    <span>https://x.com/windowsdaisuki</span>
-                </div>
-                <div class="contact-item">
-                    <span>Discord</span>
-                    <span>https://discord.gg/mSySTg52wv</span>
-                </div>
-                <div class="contact-item">
+                <a href="https://scratch.mit.edu/users/googledaisuki/" class="contact-item">
                     <span>Scratch</span>
-                    <span>https://scratch.mit.edu/users/googledaisuki//span>
-                </div>
+                    <span>my Scratch follow now</span>
+                </a>
+                <a href="https://discord.gg/mSySTg52wv" class="contact-item" target="_blank" rel="noopener noreferrer">
+                    <span>Discord</span>
+                    <span>Discord Server Join Now</span>
+                </a>
+                <a href="https://x.com/windowsdaisuki" class="contact-item" target="_blank" rel="noopener noreferrer">
+                    <span>X</span>
+                    <span>My SNS Follow Now</span>
+                </a>
             </div>
         </section>
     </div>
